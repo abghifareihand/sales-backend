@@ -26,27 +26,5 @@ class AppServiceProvider extends ServiceProvider
     {
         Carbon::setLocale('id');
         Paginator::useBootstrapFive();
-
-        // =========================
-        // Notifikasi return stok
-        // =========================
-        // View::composer('layout.partials.header', function ($view) {
-        //     $user = Auth::user();
-
-        //     if($user && in_array($user->role, ['owner','pusat'])) {
-        //         $returnItems = Distribution::with(['product','fromBranch','toBranch','toSales'])
-        //             ->where(function($q){
-        //                 $q->where('type','cabang_to_pusat')
-        //                 ->orWhere('type','sales_to_cabang');
-        //             })
-        //             ->whereDate('created_at', now())
-        //             ->orderByDesc('created_at')
-        //             ->get();
-
-        //         $returnCount = $returnItems->count();
-
-        //         $view->with(compact('returnItems','returnCount'));
-        //     }
-        // });
     }
 }
