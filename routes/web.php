@@ -5,6 +5,7 @@ use App\Http\Controllers\Web\Cabang\CabangDashboardController;
 use App\Http\Controllers\Web\Cabang\CabangStockController;
 use App\Http\Controllers\Web\Cabang\CabangTransactionController;
 use App\Http\Controllers\Web\Cabang\CabangUserController;
+use App\Http\Controllers\Web\NotificationController;
 use App\Http\Controllers\Web\Owner\OwnerBranchController;
 use App\Http\Controllers\Web\Owner\OwnerDashboardController;
 use App\Http\Controllers\Web\Owner\OwnerProductController;
@@ -30,6 +31,7 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::middleware(['auth'])->group(function () {
     // Logout
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/notifications/mark-read', [NotificationController::class, 'markRead'])->name('distributions.markRead');
 
     // ================= OWNER =================
     Route::prefix('owner')->middleware([RoleMiddleware::class . ':owner'])->group(function() {

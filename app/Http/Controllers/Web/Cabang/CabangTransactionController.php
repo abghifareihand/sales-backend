@@ -65,10 +65,10 @@ class CabangTransactionController extends Controller
         // hitung profit estimasi
         $editProfit = $request->edit_total - $costTotal;
 
-        // validasi jika profit <= 0
-        if ($editProfit <= 0) {
-            return redirect()->back()->with('error', 'Pengajuan gagal: profit tidak boleh 0 atau minus.');
-        }
+        // // validasi jika profit <= 0
+        // if ($editProfit <= 0) {
+        //     return redirect()->back()->with('error', 'Pengajuan gagal: profit tidak boleh 0 atau minus.');
+        // }
 
         TransactionEdit::create([
             'transaction_id' => $transaction->id,

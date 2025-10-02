@@ -84,7 +84,7 @@
                                     @endforeach
                                     @if($bestSellers->isEmpty())
                                     <tr>
-                                        <td colspan="3" class="text-center">Tidak ada data best seller</td>
+                                        <td colspan="3" class="text-center">Tidak ada data produk terlaris</td>
                                     </tr>
                                     @endif
                                 </tbody>
@@ -114,7 +114,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($recentTransactions as $index => $tx)
+                                    @forelse($recentTransactions as $index => $tx)
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
                                         <td>
@@ -127,7 +127,11 @@
                                         <td>Rp {{ number_format($tx->total, 0, ',', '.') }}</td>
                                         <td>{{ \Carbon\Carbon::parse($tx->created_at)->locale('id')->translatedFormat('d M Y') }}</td>
                                     </tr>
-                                    @endforeach
+                                    @empty
+                                        <tr>
+                                            <td colspan="6" class="text-center">Tidak ada data transaksi terkini</td>
+                                        </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>

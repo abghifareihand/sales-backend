@@ -147,6 +147,7 @@ class PusatStockController extends Controller
             'to_branch_id' => $request->branch_id,
             'product_id' => $stock->product_id,
             'quantity' => $request->quantity,
+            'notes' => $request->notes,
             'type' => 'pusat_to_cabang',
         ]);
 

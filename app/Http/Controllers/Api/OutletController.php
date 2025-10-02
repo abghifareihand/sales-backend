@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Outlet;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class OutletController extends Controller
 {
@@ -25,17 +26,27 @@ class OutletController extends Controller
     // Simpan outlet baru dengan created_by = user login
     public function store(Request $request)
     {
-        $request->validate([
-            'id_outlet' => 'required|string',
+        $user = $request->user();
+
+        $validator = Validator::make($request->all(), [
+            'id_outlet' => 'required|string|unique:outlets,id_outlet',
             'name_outlet' => 'required|string',
             'address_outlet' => 'required|string',
             'name' => 'nullable|string',
             'phone' => 'nullable|string',
             'latitude' => 'required|string',
             'longitude' => 'required|string'
+        ], [
+            'id_outlet.unique' => 'ID outlet sudah digunakan'
         ]);
 
-        $user = $request->user();
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => $validator->errors()->first() // ambil error pertama dari semua field
+            ], 400);
+        }
+
 
         $outlet = Outlet::create([
             'id_outlet' => $request->id_outlet,

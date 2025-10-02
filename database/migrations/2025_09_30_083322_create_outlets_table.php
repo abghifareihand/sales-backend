@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('outlets', function (Blueprint $table) {
             $table->id();
             $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
-            $table->string('id_outlet');
+            $table->string('id_outlet')->unique();
             $table->string('name_outlet');
             $table->string('address_outlet');
             $table->string('name')->nullable();

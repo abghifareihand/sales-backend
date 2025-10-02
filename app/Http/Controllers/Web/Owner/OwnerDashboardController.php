@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web\Owner;
 
 use App\Http\Controllers\Controller;
+use App\Models\Distribution;
 use App\Models\Product;
 use App\Models\Stock;
 use App\Models\Transaction;
@@ -93,6 +94,15 @@ class OwnerDashboardController extends Controller
             ->get()
             ->sum(fn($stock) => $stock->quantity * $stock->product->cost_price);
 
+
+        $returnItems = Distribution::with(['product', 'fromBranch', 'toBranch', 'toSales'])
+            ->whereIn('type', ['cabang_to_pusat', 'sales_to_cabang']) // lebih rapi daripada orWhere
+            ->whereDate('created_at', now()) // hanya hari ini
+            ->orderByDesc('created_at')
+            ->get();
+
+        $returnCount = $returnItems->where('is_read', false)->count();
+
         return view('pages.owner.dashboard', compact(
             'totalProductsSold',
             'totalRevenue',
@@ -103,6 +113,8 @@ class OwnerDashboardController extends Controller
             'expiredProducts',
             'topSales',
             'totalAsset',
+            'returnItems',
+            'returnCount',
         ));
     }
 }

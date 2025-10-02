@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use App\Models\Stock;
 use App\Models\Transaction;
 use App\Models\TransactionItem;
@@ -96,7 +97,7 @@ class TransactionController extends Controller
 
         // Simpan item transaksi & update stok
         foreach($request->items as $item){
-            $product = \App\Models\Product::find($item['product_id']);
+            $product = Product::find($item['product_id']);
             $price = $product->selling_price;
             $cost = $product->cost_price;
 
@@ -129,5 +130,50 @@ class TransactionController extends Controller
             'total' => $total
         ]);
     }
+
+    public function summary(Request $request)
+    {
+        $salesId = $request->user()->id;
+
+        $now = now();
+        $today = $now->format('Y-m-d');
+        $startOfWeek = $now->startOfWeek()->format('Y-m-d');
+        $startOfMonth = $now->startOfMonth()->format('Y-m-d');
+
+        $daily = Transaction::where('sales_id', $salesId)
+            ->whereDate('created_at', $today)
+            ->selectRaw('SUM(total) as total_sales, SUM(profit) as total_profit')
+            ->first();
+
+        $weekly = Transaction::where('sales_id', $salesId)
+            ->whereDate('created_at', '>=', $startOfWeek)
+            ->selectRaw('SUM(total) as total_sales, SUM(profit) as total_profit')
+            ->first();
+
+        $monthly = Transaction::where('sales_id', $salesId)
+            ->whereDate('created_at', '>=', $startOfMonth)
+            ->selectRaw('SUM(total) as total_sales, SUM(profit) as total_profit')
+            ->first();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Ringkasan penjualan berhasil didapatkan',
+            'summary' => [
+                'daily' => [
+                    'total' => $daily->total_sales ?? 0,
+                    'profit' => $daily->total_profit ?? 0,
+                ],
+                'weekly' => [
+                    'total' => $weekly->total_sales ?? 0,
+                    'profit' => $weekly->total_profit ?? 0,
+                ],
+                'monthly' => [
+                    'total' => $monthly->total_sales ?? 0,
+                    'profit' => $monthly->total_profit ?? 0,
+                ]
+            ]
+        ]);
+    }
+
 
 }

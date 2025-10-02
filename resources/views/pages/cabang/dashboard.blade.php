@@ -68,18 +68,17 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($bestSellers as $index => $bs)
+                                    @forelse($bestSellers as $index => $bs)
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
                                         <td>{{ $bs->name }}</td>
                                         <td>{{ $bs->total_sold }}</td>
                                     </tr>
-                                    @endforeach
-                                    @if($bestSellers->isEmpty())
-                                    <tr>
-                                        <td colspan="3" class="text-center">Tidak ada data best seller</td>
-                                    </tr>
-                                    @endif
+                                    @empty
+                                        <tr>
+                                            <td colspan="3" class="text-center">Tidak ada data produk terlaris</td>
+                                        </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
@@ -107,7 +106,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($recentTransactions as $index => $tx)
+                                    @forelse($recentTransactions as $index => $tx)
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
                                         <td>
@@ -119,7 +118,11 @@
                                         <td>Rp {{ number_format($tx->total, 0, ',', '.') }}
                                         <td>{{ \Carbon\Carbon::parse($tx->created_at)->locale('id')->translatedFormat('d M Y') }}</td>
                                     </tr>
-                                    @endforeach
+                                    @empty
+                                        <tr>
+                                            <td colspan="5" class="text-center">Tidak ada data transaksi terkini</td>
+                                        </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>

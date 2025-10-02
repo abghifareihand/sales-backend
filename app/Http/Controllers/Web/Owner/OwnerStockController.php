@@ -123,6 +123,7 @@ class OwnerStockController extends Controller
                 'to_branch_id' => $request->branch_id,
                 'product_id' => $stock->product_id,
                 'quantity' => $request->quantity,
+                'notes' => $request->notes,
                 'type' => 'pusat_to_cabang',
             ]);
 
@@ -190,6 +191,7 @@ class OwnerStockController extends Controller
             'to_sales_id' => $sales->id,
             'product_id' => $stock->product_id,
             'quantity' => $request->quantity,
+            'notes' => $request->notes,
             'type' => 'cabang_to_sales', // bisa tetap sama tipe
         ]);
 

@@ -48,78 +48,67 @@
         <!-- /Full Screen -->
 
         <!-- Notifications -->
-        <li class="nav-item dropdown nav-item-box">
-            <a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-                <i data-feather="bell"></i><span class="badge rounded-pill">2</span>
-            </a>
-            <div class="dropdown-menu notifications">
-                <div class="topnav-dropdown-header">
-                    <span class="notification-title">Notifications</span>
-                    <a href="javascript:void(0)" class="clear-noti"> Clear All </a>
+        @php
+            $user = auth()->user();
+        @endphp
+
+        @if(in_array($user->role, ['owner', 'pusat']))
+            <!-- Notifications -->
+            <li id="notifDropdown" class="nav-item dropdown nav-item-box">
+                <a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+                    <i data-feather="bell"></i>
+                    @if(!empty($returnCount) && $returnCount > 0)
+                        <span class="badge rounded-pill">{{ $returnCount }}</span>
+                    @endif
+                </a>
+                <div class="dropdown-menu notifications">
+                    <div class="topnav-dropdown-header">
+                        <span class="notification-title">Notifications</span>
+                        <a href="javascript:void(0)" class="clear-noti">Clear All</a>
+                    </div>
+                    <div class="noti-content">
+                        <ul class="notification-list">
+                            @forelse($returnItems ?? [] as $item)
+                                <li class="notification-message">
+                                    <a href="#">
+                                        <div class="media d-flex">
+                                            <div class="media-body flex-grow-1">
+                                                <p class="noti-details">
+                                                    Produk <span class="noti-title">{{ optional($item->product)->name ?? 'Unknown' }}</span>
+                                                    @if($item->type == 'cabang_to_pusat')
+                                                        dikembalikan ke pusat oleh
+                                                        <span class="noti-title">{{ optional($item->fromBranch)->name ?? 'Unknown Branch' }}</span>
+                                                    @elseif($item->type == 'sales_to_cabang')
+                                                        dikembalikan ke cabang oleh
+                                                        <span class="noti-title">{{ optional($item->stock)->sales->name ?? 'Unknown Sales' }}</span>
+                                                    @else
+                                                        pergerakan stok
+                                                    @endif
+                                                    ({{ $item->quantity ?? 0 }} unit)
+                                                </p>
+                                                <p class="noti-time">
+                                                    <span class="notification-time">{{ optional($item->created_at)->diffForHumans() ?? '-' }}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                            @empty
+                                <li class="notification-message text-center">
+                                    <span>Tidak ada notifikasi baru</span>
+                                </li>
+                            @endforelse
+
+                        </ul>
+                    </div>
+                    <div class="topnav-dropdown-footer">
+                        <a href="#">View all Notifications</a>
+                    </div>
                 </div>
-                <div class="noti-content">
-                    <ul class="notification-list">
-                        <li class="notification-message">
-                            <a href="{{ url('activities') }}">
-                                <div class="media d-flex">
-                                    <span class="avatar flex-shrink-0">
-                                        <img alt=""
-                                            src="{{ URL::asset('/build/img/profiles/avatar-02.jpg') }}">
-                                    </span>
-                                    <div class="media-body flex-grow-1">
-                                        <p class="noti-details"><span class="noti-title">John Doe</span> added
-                                            new task <span class="noti-title">Patient appointment booking</span>
-                                        </p>
-                                        <p class="noti-time"><span class="notification-time">4 mins ago</span>
-                                        </p>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="notification-message">
-                            <a href="{{ url('activities') }}">
-                                <div class="media d-flex">
-                                    <span class="avatar flex-shrink-0">
-                                        <img alt=""
-                                            src="{{ URL::asset('/build/img/profiles/avatar-03.jpg') }}">
-                                    </span>
-                                    <div class="media-body flex-grow-1">
-                                        <p class="noti-details"><span class="noti-title">Tarah Shropshire</span>
-                                            changed the task name <span class="noti-title">Appointment booking
-                                                with payment gateway</span>
-                                        </p>
-                                        <p class="noti-time"><span class="notification-time">6 mins ago</span>
-                                        </p>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="notification-message">
-                            <a href="{{ url('activities') }}">
-                                <div class="media d-flex">
-                                    <span class="avatar flex-shrink-0">
-                                        <img alt=""
-                                            src="{{ URL::asset('/build/img/profiles/avatar-06.jpg') }}">
-                                    </span>
-                                    <div class="media-body flex-grow-1">
-                                        <p class="noti-details"><span class="noti-title">Misty Tison</span>
-                                            added <span class="noti-title">Domenic Houston</span> and <span
-                                                class="noti-title">Claire Mapes</span> to project <span
-                                                class="noti-title">Doctor available module</span>
-                                        </p>
-                                        <p class="noti-time"><span class="notification-time">8 mins ago</span>
-                                        </p>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="topnav-dropdown-footer">
-                    <a href="">View all Notifications</a>
-                </div>
-            </div>
-        </li>
+            </li>
+        @endif
+
+
         <!-- /Notifications -->
 
         {{-- <!-- Email -->
@@ -190,3 +179,29 @@
     <!-- /Mobile Menu -->
 </div>
 <!-- /Header -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var notifDropdown = document.getElementById('notifDropdown');
+
+        if(notifDropdown) {
+            notifDropdown.addEventListener('show.bs.dropdown', function () {
+                fetch("{{ route('distributions.markRead') }}", {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({})
+                }).then(response => response.json())
+                  .then(data => {
+                      if(data.status) {
+                          // update badge menjadi 0 setelah dibaca
+                          notifDropdown.querySelector('.badge').textContent = '0';
+                      }
+                  });
+            });
+        }
+    });
+</script>

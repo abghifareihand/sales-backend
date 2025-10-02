@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('quantity');
             $table->enum('type', ['pusat_to_cabang','cabang_to_sales', 'sales_to_cabang', 'cabang_to_pusat']);
             $table->string('notes')->nullable();
+            $table->boolean('is_read')->default(false);
             $table->timestamps();
         });
     }

@@ -88,6 +88,7 @@ class CabangStockController extends Controller
             'from_branch_id' => $stock->branch_id,
             'to_sales_id' => $sales->id,
             'product_id' => $stock->product_id,
+            'notes' => $request->notes,
             'quantity' => $request->quantity,
             'type' => 'cabang_to_sales',
         ]);
@@ -140,12 +141,10 @@ class CabangStockController extends Controller
             'product_id' => $stock->product_id,
             'quantity' => $request->quantity,
             'type' => 'cabang_to_pusat',
-            'notes' => $request->notes ?? 'Return from branch',
+            'notes' => $request->notes,
         ]);
 
         return redirect()->route('cabang.stock.cabang.index')
                         ->with('success', 'Stok berhasil dikembalikan ke pusat');
     }
-
-
 }
