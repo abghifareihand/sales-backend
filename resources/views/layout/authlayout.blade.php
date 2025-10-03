@@ -19,5 +19,8 @@
 
     <!-- Footer scripts -->
     @include('layout.partials.footer-scripts')
+
+    <!-- Stack untuk script khusus halaman -->
+    @stack('scripts')
 </body>
 </html>

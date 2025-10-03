@@ -17,6 +17,12 @@
                                 <h3>Login</h3>
                                 <h4>Masukkan username dan password anda untuk masuk</h4>
                             </div>
+                            <!-- Error session (username/password salah) -->
+                            @if(session('error'))
+                                <div class="alert alert-danger mt-2">
+                                    {{ session('error') }}
+                                </div>
+                            @endif
                             <div class="form-login">
                                 <label class="form-label">Username</label>
                                 <div class="form-addons">
@@ -27,7 +33,6 @@
                                     @enderror
                                 </div>
                             </div>
-
                             <div class="form-login">
                                 <label>Password</label>
                                 <div class="pass-group">
@@ -39,12 +44,6 @@
                                     @enderror
                                 </div>
                             </div>
-                            <!-- Error session (username/password salah) -->
-                            @if(session('error'))
-                                <div class="alert alert-danger mt-2">
-                                    {{ session('error') }}
-                                </div>
-                            @endif
                             <div class="form-login">
                                 <button class="btn btn-login" type="submit">Login</button>
                             </div>
@@ -57,3 +56,23 @@
     </div>
 @endsection
 
+
+
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Ambil semua input di form login
+    const inputs = document.querySelectorAll('.login-userset input');
+    const alertBox = document.querySelector('.alert-danger');
+
+    inputs.forEach(input => {
+        input.addEventListener('input', () => {
+            if(alertBox) {
+                alertBox.style.display = 'none'; // sembunyikan alert
+            }
+        });
+    });
+});
+</script>
+@endpush
