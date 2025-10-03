@@ -77,10 +77,12 @@
                                                     Produk <span class="noti-title">{{ optional($item->product)->name ?? 'Unknown' }}</span>
                                                     @if($item->type == 'cabang_to_pusat')
                                                         dikembalikan ke pusat oleh
-                                                        <span class="noti-title">{{ optional($item->fromBranch)->name ?? 'Unknown Branch' }}</span>
+                                                        <span class="noti-title">{{ optional($item->fromBranch)->name ?? 'Cabang' }}</span>
                                                     @elseif($item->type == 'sales_to_cabang')
-                                                        dikembalikan ke cabang oleh
-                                                        <span class="noti-title">{{ optional($item->stock)->sales->name ?? 'Unknown Sales' }}</span>
+                                                        dikembalikan ke cabang
+                                                        <span class="noti-title">{{ optional($item->toBranch)->name ?? 'Cabang' }}</span>
+                                                        oleh sales
+                                                        <span class="noti-title">{{ optional($item->toSales)->name ?? 'Sales' }}</span>
                                                     @else
                                                         pergerakan stok
                                                     @endif
@@ -100,9 +102,6 @@
                             @endforelse
 
                         </ul>
-                    </div>
-                    <div class="topnav-dropdown-footer">
-                        <a href="#">View all Notifications</a>
                     </div>
                 </div>
             </li>

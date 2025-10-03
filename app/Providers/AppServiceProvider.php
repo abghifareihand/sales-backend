@@ -26,5 +26,20 @@ class AppServiceProvider extends ServiceProvider
     {
         Carbon::setLocale('id');
         Paginator::useBootstrapFive();
+
+        View::composer('layout.partials.header', function ($view) {
+            $returnItems = Distribution::with(['product', 'fromBranch', 'toBranch', 'toSales'])
+                ->whereIn('type', ['cabang_to_pusat', 'sales_to_cabang'])
+                ->orderByDesc('created_at')
+                ->get();
+
+            $returnCount = $returnItems->where('is_read', false)->count();
+
+            $view->with([
+                'returnItems' => $returnItems,
+                'returnCount' => $returnCount,
+            ]);
+        });
+
     }
 }

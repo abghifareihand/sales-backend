@@ -33,6 +33,10 @@
                                     <h6>{{ $transaction->outlet->name }}</h6>
                                 </li>
                                 <li>
+                                    <h4>ID Outlet</h4>
+                                    <h6>{{ $transaction->outlet->id_outlet }}</h6>
+                                </li>
+                                <li>
                                     <h4>Nama Outlet</h4>
                                     <h6>{{ $transaction->outlet->name_outlet }}</h6>
                                 </li>

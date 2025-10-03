@@ -111,7 +111,7 @@
                                                             name="expired"
                                                             class="datetimepicker form-control @error('expired') is-invalid @enderror"
                                                             placeholder="Pilih Tanggal"
-                                                            value="{{ old('expired', \Carbon\Carbon::parse($product->expired)->format('d-m-Y')) }}">
+                                                            value="{{ old('expired', $product->expired ? \Carbon\Carbon::parse($product->expired)->format('d-m-Y') : '') }}">
                                                     </div>
                                                     @error('expired')
                                                         <div class="invalid-feedback d-block">{{ $message }}</div>

@@ -111,7 +111,7 @@
                                                             name="expired"
                                                             class="datetimepicker form-control @error('expired') is-invalid @enderror"
                                                             placeholder="Pilih Tanggal"
-                                                            value="{{ old('expired', \Carbon\Carbon::parse($product->expired)->format('d-m-Y')) }}">
+                                                            value="{{ old('expired', $product->expired ? \Carbon\Carbon::parse($product->expired)->format('d-m-Y') : '') }}">
                                                     </div>
                                                     @error('expired')
                                                         <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -160,3 +160,18 @@
         </div>
     </div>
 @endsection
+@push('scripts')
+<script>
+$('#expired_display').datetimepicker({
+    format: 'd-m-Y',
+    timepicker: false,
+    onSelectDate: function(dp, $input){
+        let date = dp; // Date object
+        let y = date.getFullYear();
+        let m = ('0'+(date.getMonth()+1)).slice(-2);
+        let d = ('0'+date.getDate()).slice(-2);
+        $('#expired').val(`${y}-${m}-${d}`); // format Y-m-d untuk backend
+    }
+});
+</script>
+@endpush

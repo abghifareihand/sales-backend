@@ -1,9 +1,10 @@
+<!-- resources/views/layout/authlayout.blade.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-    <title>@yield('title', 'Digital Solution')</title>
+    <title>@yield('title', 'Bee Digital Solution')</title>
 
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="{{ URL::asset('/build/img/favicon.png')}}">

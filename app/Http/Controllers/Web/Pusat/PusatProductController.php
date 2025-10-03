@@ -92,7 +92,19 @@ class PusatProductController extends Controller
             'selling_price.required' => 'Harga jual wajib diisi',
         ]);
 
-        $product->update($request->only('name','description','cost_price','selling_price'));
+        $expired = \Carbon\Carbon::createFromFormat('d-m-Y', $request->input('expired'))->format('Y-m-d');
+
+        $product->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'provider' => $request->provider,
+            'category' => $request->category,
+            'zona' => $request->zona,
+            'kuota' => $request->kuota,
+            'expired' => $expired,
+            'cost_price' => $request->cost_price,
+            'selling_price' => $request->selling_price,
+        ]);
 
         return redirect()->route('pusat.product.index')->with('success', 'Produk berhasil diperbarui');
     }

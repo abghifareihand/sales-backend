@@ -15,6 +15,7 @@
                         <div class="login-userset">
                             <div class="login-userheading">
                                 <h3>Login</h3>
+                                <h4>Masukkan username dan password anda untuk masuk</h4>
                             </div>
                             <div class="form-login">
                                 <label class="form-label">Username</label>
@@ -47,26 +48,6 @@
                             <div class="form-login">
                                 <button class="btn btn-login" type="submit">Login</button>
                             </div>
-                            <div class="form-sociallink">
-                                <ul class="d-flex">
-                                    <li>
-                                        <a href="javascript:void(0);" class="facebook-logo">
-                                            <img src="{{ URL::asset('/build/img/icons/facebook-logo.svg') }}"
-                                                alt="Facebook">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">
-                                            <img src="{{ URL::asset('/build/img/icons/google.png') }}" alt="Google">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);" class="apple-logo">
-                                            <img src="{{ URL::asset('/build/img/icons/apple-logo.svg') }}" alt="Apple">
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
                         </div>
                     </form>
 
@@ -75,3 +56,4 @@
         </div>
     </div>
 @endsection
+
