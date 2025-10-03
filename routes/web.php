@@ -32,6 +32,10 @@ Route::middleware(['auth'])->group(function () {
     // Logout
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('/notifications/mark-read', [NotificationController::class, 'markRead'])->name('distributions.markRead');
+    Route::get('/notifications', [NotificationController::class, 'index'])
+        ->name('notifications.index')
+        ->middleware([RoleMiddleware::class . ':owner,pusat']);
+
 
     // ================= OWNER =================
     Route::prefix('owner')->middleware([RoleMiddleware::class . ':owner'])->group(function() {

@@ -100,8 +100,10 @@
                                     <span>Tidak ada notifikasi baru</span>
                                 </li>
                             @endforelse
-
                         </ul>
+                    </div>
+                    <div class="topnav-dropdown-footer">
+                        <a href="{{ route('notifications.index') }}">View all Notifications</a>
                     </div>
                 </div>
             </li>
@@ -130,7 +132,7 @@
             <a href="javascript:void(0);" class="dropdown-toggle nav-link userset" data-bs-toggle="dropdown">
                 <span class="user-info">
                     <span class="user-letter">
-                        <img src="{{ URL::asset('/build/img/profiles/profile-01.png') }}" alt=""
+                        <img src="{{ URL::asset('/build/img/profiles/user.png') }}" alt=""
                             class="img-fluid">
                     </span>
                     <span class="user-detail">
@@ -142,7 +144,7 @@
             <div class="dropdown-menu menu-drop-user">
                 <div class="profilename">
                     <div class="profileset">
-                        <span class="user-img"><img src="{{ URL::asset('/build/img/profiles/profile-01.png') }}"
+                        <span class="user-img"><img src="{{ URL::asset('/build/img/profiles/user.png') }}"
                                 alt="">
                             <span class="status online"></span></span>
                         <div class="profilesets">
@@ -170,8 +172,6 @@
         <a href="javascript:void(0);" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
             aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
         <div class="dropdown-menu dropdown-menu-right">
-            <a class="dropdown-item" href="{{ url('profile') }}">My Profile</a>
-            <a class="dropdown-item" href="{{ url('general-settings') }}">Settings</a>
             <a class="dropdown-item" href="{{ url('signin') }}">Logout</a>
         </div>
     </div>

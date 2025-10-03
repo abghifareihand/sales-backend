@@ -3,14 +3,14 @@
 <div class="page-wrapper">
     <div class="content">
         <!-- Welcome -->
-        <div class="welcome d-lg-flex align-items-center justify-content-between">
+        {{-- <div class="welcome d-lg-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center welcome-text">
                 <h3 class="d-flex align-items-center">
                     Halo {{ auth()->user()->name }} - {{ Auth::user()->branch->name }}
                 </h3>
             </div>
             <div class="d-flex align-items-center">
-                {{-- <div class="position-relative daterange-wraper me-2">
+                <div class="position-relative daterange-wraper me-2">
                     <div class="input-groupicon calender-input">
                         <input type="text" class="form-control date-range bookingrange" placeholder="Select">
                     </div>
@@ -18,10 +18,10 @@
                 </div>
                 <button type="button" class="btn btn-white-outline d-none d-md-inline-block">
                     <i data-feather="rotate-ccw" class="feather-16"></i>
-                </button> --}}
+                </button>
                 <a href="#" class="d-none d-lg-inline-block" id="collapse-header"><i data-feather="chevron-up" class="feather-16"></i></a>
             </div>
-        </div>
+        </div> --}}
 
         <!-- Cards: Total Sales, Total Revenue, Total Profit, Total Asset -->
         <div class="row sales-cards">
