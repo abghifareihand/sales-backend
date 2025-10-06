@@ -11,14 +11,15 @@ use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $transactions = Transaction::where('sales_id', $request->user()->id)
-            ->with('items.product','outlet', 'edits')
+            ->with('items.product', 'outlet', 'edits')
             ->latest() // transaksi terbaru dulu
             ->get();
 
         // Format rapi
-        $data = $transactions->map(function($transaction){
+        $data = $transactions->map(function ($transaction) {
             $lastEdit = $transaction->edits->sortByDesc('id')->first();
             return [
                 'id' => $transaction->id,
@@ -34,7 +35,7 @@ class TransactionController extends Controller
                 'total' => $transaction->total,
                 'profit' => $transaction->profit,
                 'created_at' => $transaction->created_at->format('Y-m-d H:i:s'),
-                'items' => $transaction->items->map(function($item){
+                'items' => $transaction->items->map(function ($item) {
                     return [
                         'id' => $item->id,
                         'product_id' => $item->product->id,
@@ -56,14 +57,15 @@ class TransactionController extends Controller
     }
 
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $request->validate([
-            'outlet_id'=>'required|exists:outlets,id',
-            'items'=>'required|array|min:1',
-            'items.*.product_id'=>'required|exists:products,id',
-            'items.*.quantity'=>'required|integer|min:1',
-            'latitude'=>'required|string',
-            'longitude'=>'required|string'
+            'outlet_id' => 'required|exists:outlets,id',
+            'items' => 'required|array|min:1',
+            'items.*.product_id' => 'required|exists:products,id',
+            'items.*.quantity' => 'required|integer|min:1',
+            'latitude' => 'required|string',
+            'longitude' => 'required|string'
         ]);
 
         $sales = $request->user();
@@ -71,15 +73,18 @@ class TransactionController extends Controller
         $profit = 0;
 
         // Cek stok sales dulu
-        foreach($request->items as $item){
+        foreach ($request->items as $item) {
             $stock = Stock::where('sales_id', $sales->id)
-                        ->where('product_id', $item['product_id'])
-                        ->first();
+                ->where('product_id', $item['product_id'])
+                ->first();
 
-            if(!$stock || $stock->quantity < $item['quantity']){
+            // Ambil nama produk
+            $product = Product::find($item['product_id']);
+
+            if (!$stock || $stock->quantity < $item['quantity']) {
                 return response()->json([
-                    'status' => 'error',
-                    'message' => "Stok produk ID {$item['product_id']} tidak cukup"
+                    'status' => false,
+                    'message' => "Stok produk {$product->name} tidak cukup"
                 ], 400);
             }
         }
@@ -96,7 +101,7 @@ class TransactionController extends Controller
         ]);
 
         // Simpan item transaksi & update stok
-        foreach($request->items as $item){
+        foreach ($request->items as $item) {
             $product = Product::find($item['product_id']);
             $price = $product->selling_price;
             $cost = $product->cost_price;
@@ -114,8 +119,8 @@ class TransactionController extends Controller
 
             // Kurangi stok sales
             $stock = Stock::where('sales_id', $sales->id)
-                        ->where('product_id', $product->id)
-                        ->first();
+                ->where('product_id', $product->id)
+                ->first();
             $stock->quantity -= $item['quantity'];
             $stock->save();
         }
@@ -160,20 +165,18 @@ class TransactionController extends Controller
             'message' => 'Ringkasan penjualan berhasil didapatkan',
             'summary' => [
                 'daily' => [
-                    'total' => $daily->total_sales ?? 0,
-                    'profit' => $daily->total_profit ?? 0,
+                    'total' => (float) ($daily->total_sales ?? 0),
+                    'profit' => (float) ($daily->total_profit ?? 0),
                 ],
                 'weekly' => [
-                    'total' => $weekly->total_sales ?? 0,
-                    'profit' => $weekly->total_profit ?? 0,
+                    'total' => (float) ($weekly->total_sales ?? 0),
+                    'profit' => (float) ($weekly->total_profit ?? 0),
                 ],
                 'monthly' => [
-                    'total' => $monthly->total_sales ?? 0,
-                    'profit' => $monthly->total_profit ?? 0,
+                    'total' => (float) ($monthly->total_sales ?? 0),
+                    'profit' => (float) ($monthly->total_profit ?? 0),
                 ]
             ]
         ]);
     }
-
-
 }
